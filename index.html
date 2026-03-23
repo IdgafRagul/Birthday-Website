@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎂 A Secret for You</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════
+       VAULT LOCK SCREEN
+  ════════════════════════════════════════ -->
+  <div id="vault-screen">
+    <canvas id="vault-sparkle"></canvas>
+    <div id="vault-petals"></div>
+
+    <div class="vault-door">
+      <div class="vault-ring"></div>
+      <div class="vault-ring"></div>
+      <div class="vault-ring"></div>
+      <div class="vault-ring"></div>
+      <div class="vault-center">
+        <span class="vault-lock-icon" id="vault-icon">🔒</span>
+      </div>
+    </div>
+
+    <p class="vault-title">Something special awaits you 🌸</p>
+    <p class="vault-hint">Enter the secret code to open</p>
+
+    <div class="dot-row" id="dot-row">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+
+    <div class="numpad" id="numpad">
+      <button class="num-btn" data-n="1">1</button>
+      <button class="num-btn" data-n="2">2</button>
+      <button class="num-btn" data-n="3">3</button>
+      <button class="num-btn" data-n="4">4</button>
+      <button class="num-btn" data-n="5">5</button>
+      <button class="num-btn" data-n="6">6</button>
+      <button class="num-btn" data-n="7">7</button>
+      <button class="num-btn" data-n="8">8</button>
+      <button class="num-btn" data-n="9">9</button>
+      <button class="num-btn del-btn" id="del-btn">⌫</button>
+      <button class="num-btn" data-n="0">0</button>
+      <button class="num-btn ok-btn" id="ok-btn">OK</button>
+    </div>
+
+    <p class="vault-err" id="vault-err">Wrong code, my love. Try again 💔</p>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       MAIN SITE
+  ════════════════════════════════════════ -->
+  <div id="site">
+    <canvas id="sparkle-canvas"></canvas>
+
+    <!--
+      ✏️ BACKGROUND MUSIC
+         Place your .mp3 file in the same folder and update the src below.
+         Recommended: a soft romantic instrumental that loops seamlessly.
+    -->
+    <audio id="bg-music" loop>
+      <source src="src/Ilakozhiye Karaoke.m4a" type="audio/mpeg"/>
+      <source src="music.ogg" type="audio/ogg"/>
+    </audio>
+
+    <!-- Floating music toggle button -->
+    <button class="music-btn" id="music-btn" title="Toggle Music" aria-label="Toggle background music">
+      <span class="music-icon" id="music-icon">🎵</span>
+      <div class="music-ring"></div>
+      <div class="music-bars" id="music-bars">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </button>
+
+    <!-- Floating love-letter button -->
+    <button class="letter-btn" id="letter-btn" title="Open Love Letter">
+      💌<div class="pulse-ring"></div>
+    </button>
+
+    <!-- ── LOVE LETTER MODAL ── -->
+    <div class="letter-overlay" id="letter-overlay">
+      <div class="letter-modal">
+        <button class="letter-close" id="letter-close">✕</button>
+        <div class="letter-seal">💛</div>
+        <h2 class="letter-heading">My Dearest Love,</h2>
+        <p class="letter-date" id="letter-date-stamp"></p>
+        <div class="letter-divider"></div>
+        <div class="letter-body">There are moments in life that feel like they were
+written long before you arrived — and the moment
+I first saw you was one of them.
+
+Every morning I wake up grateful that the universe
+was thoughtful enough to place you in my world.
+You are my favourite sound, my warmest thought,
+and the reason I believe in beautiful things.
+
+Today is not just your birthday.
+It is the anniversary of the day the world
+became a little more magical, a little more golden —
+the day <em>you</em> arrived in it.
+
+I hope this year brings you everything your heart
+has been quietly wishing for. I hope you feel loved
+beyond measure, celebrated beyond words,
+and cherished far beyond this one beautiful day.
+
+Thank you for being exactly who you are.
+That has always been more than enough.</div>
+        <p class="letter-sign">Forever yours, ✦</p>
+        <div class="wax-seal">🌹</div>
+      </div>
+    </div>
+
+    <!-- ── WISH POPUP ── -->
+    <div class="wish-overlay" id="wish-overlay">
+      <div class="wish-modal" id="wish-modal">
+        <button class="wish-close-btn" id="wish-close">✕</button>
+        <span class="wish-big-emoji">🌟</span>
+        <h2 class="wish-title">Make a Wish!</h2>
+        <p class="wish-subtitle">The candles are listening… 🕯️✨</p>
+        <div class="wish-divider"></div>
+        <p class="wish-text">
+          Close your eyes and <em>believe</em> it with all your heart —
+          because today, the entire universe is on your side. 🌸<br><br>
+          <em>Happy Birthday, my love. 🎂💕</em>
+        </p>
+        <button class="wish-ok-btn" id="wish-ok-btn">I made my wish ✨</button>
+      </div>
+    </div>
+
+
+    <!-- ── SECTION 1 · HERO ── -->
+    <section id="hero">
+      <div id="petals"></div>
+      <p class="hero-badge">✦ A secret just for you ✦</p>
+      <h1 class="hero-name">Happy Birthday</h1>
+      <h2 class="hero-sub">my dearest love ✨</h2>
+      <p class="hero-msg">
+        On this beautiful day, the universe celebrates the most wonderful person
+        I have ever had the joy of knowing. Every moment with you is a gift
+        I will forever cherish. 🌸
+      </p>
+      <div class="scroll-hint"><span>scroll down</span><span>↓</span></div>
+    </section>
+
+
+    <!-- ── SECTION 2 · COUNTDOWN ── -->
+    <section id="countdown">
+      <p class="section-label">✦ her beautiful journey ✦</p>
+      <h2 class="section-title">She has blessed this world for</h2>
+      <div class="divider"></div>
+      <div class="cd-grid">
+        <div class="cd-box"><div class="cd-num" id="cd-years">0</div><div class="cd-label">Years</div></div>
+        <div class="cd-box"><div class="cd-num" id="cd-months">0</div><div class="cd-label">Months</div></div>
+        <div class="cd-box"><div class="cd-num" id="cd-days">0</div><div class="cd-label">Days</div></div>
+        <div class="cd-box"><div class="cd-num" id="cd-hours">0</div><div class="cd-label">Hours</div></div>
+        <div class="cd-box"><div class="cd-num" id="cd-mins">0</div><div class="cd-label">Minutes</div></div>
+        <div class="cd-box"><div class="cd-num" id="cd-secs">0</div><div class="cd-label">Seconds</div></div>
+      </div>
+      <p class="cd-note" id="cd-note">… and every single second made the world more beautiful 🌹</p>
+    </section>
+
+
+    <!-- ── SECTION 3 · FLIP CARDS ── -->
+    <section id="gallery">
+      <p class="section-label">✦ memories ✦</p>
+      <h2 class="section-title">Moments I <em>treasure</em></h2>
+      <div class="divider"></div>
+      <div class="card-grid" id="card-grid"></div>
+      <p class="gallery-tip">tap each card to cycle: 📷 Photo → EN English → தமிழ் Tamil 🌸</p>
+    </section>
+
+
+    <!-- ── SECTION 4 · FINALE ── -->
+    <section id="finale">
+      <canvas id="cracker-canvas"></canvas>
+
+      <p class="finale-wish">Happy Birthday! 🎂</p>
+      <p class="finale-sub">May all your wishes come true, my love</p>
+
+      <!-- Balloons -->
+      <div class="balloons-wrap" id="balloons-wrap"></div>
+
+      <!-- Cake SVG -->
+      <div class="cake-wrap">
+        <svg class="cake-svg" width="240" height="260" viewBox="0 0 240 260" fill="none">
+          <!-- shadow -->
+          <ellipse cx="120" cy="248" rx="105" ry="10" fill="#4a1428" opacity=".5"/>
+          <!-- bottom tier -->
+          <rect x="20" y="160" width="200" height="80" rx="12" fill="#c0415a"/>
+          <rect x="20" y="160" width="200" height="20" rx="6" fill="#e06070"/>
+          <path d="M30 175 Q40 190 50 175 Q60 190 70 175 Q80 190 90 175 Q100 190 110 175 Q120 190 130 175 Q140 190 150 175 Q160 190 170 175 Q180 190 190 175 Q200 190 210 175"
+                stroke="#fff0d8" stroke-width="8" fill="none" stroke-linecap="round"/>
+          <circle cx="45"  cy="200" r="6" fill="#f0c97a"/>
+          <circle cx="75"  cy="215" r="5" fill="#f0c97a"/>
+          <circle cx="110" cy="205" r="6" fill="#f0c97a"/>
+          <circle cx="145" cy="215" r="5" fill="#f0c97a"/>
+          <circle cx="180" cy="200" r="6" fill="#f0c97a"/>
+          <circle cx="200" cy="212" r="4" fill="#f0c97a"/>
+          <!-- top tier -->
+          <rect x="50" y="95"  width="140" height="70" rx="10" fill="#e06070"/>
+          <rect x="50" y="95"  width="140" height="18" rx="5"  fill="#f08090"/>
+          <path d="M60 108 Q70 122 80 108 Q90 122 100 108 Q110 122 120 108 Q130 122 140 108 Q150 122 160 108 Q170 122 180 108"
+                stroke="#fff0d8" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <circle cx="75"  cy="135" r="5" fill="#f0c97a"/>
+          <circle cx="105" cy="148" r="4" fill="#f0c97a"/>
+          <circle cx="135" cy="138" r="5" fill="#f0c97a"/>
+          <circle cx="165" cy="148" r="4" fill="#f0c97a"/>
+          <text x="120" y="148" text-anchor="middle"
+                font-family="'Dancing Script',cursive" font-size="16" fill="#fff0d8">Happy B-Day!</text>
+          <!-- candles -->
+          <rect x="63"  y="68" width="12" height="32" rx="4" fill="#f0c97a"/>
+          <ellipse cx="69"  cy="68" rx="6" ry="3" fill="#c9933a"/>
+          <g class="flame" id="f1">
+            <ellipse cx="69" cy="58" rx="5" ry="9" fill="#ffcc44" opacity=".9"/>
+            <ellipse cx="69" cy="60" rx="3" ry="5" fill="#ff8800"/>
+            <ellipse cx="69" cy="62" rx="2" ry="3" fill="#fff"/>
+          </g>
+          <g class="smoke" id="s1"><ellipse cx="69" cy="50" rx="3" ry="5" fill="#bbb" opacity=".5"/></g>
+
+          <rect x="88"  y="60" width="12" height="38" rx="4" fill="#e07b8a"/>
+          <ellipse cx="94"  cy="60" rx="6" ry="3" fill="#c0415a"/>
+          <g class="flame" id="f2">
+            <ellipse cx="94" cy="50" rx="5" ry="9" fill="#ffcc44" opacity=".9"/>
+            <ellipse cx="94" cy="52" rx="3" ry="5" fill="#ff8800"/>
+            <ellipse cx="94" cy="54" rx="2" ry="3" fill="#fff"/>
+          </g>
+          <g class="smoke" id="s2"><ellipse cx="94" cy="42" rx="3" ry="5" fill="#bbb" opacity=".5"/></g>
+
+          <rect x="113" y="55" width="12" height="43" rx="4" fill="#f0c97a"/>
+          <ellipse cx="119" cy="55" rx="6" ry="3" fill="#c9933a"/>
+          <g class="flame" id="f3">
+            <ellipse cx="119" cy="45" rx="5" ry="9" fill="#ffcc44" opacity=".9"/>
+            <ellipse cx="119" cy="47" rx="3" ry="5" fill="#ff8800"/>
+            <ellipse cx="119" cy="49" rx="2" ry="3" fill="#fff"/>
+          </g>
+          <g class="smoke" id="s3"><ellipse cx="119" cy="37" rx="3" ry="5" fill="#bbb" opacity=".5"/></g>
+
+          <rect x="138" y="62" width="12" height="36" rx="4" fill="#e07b8a"/>
+          <ellipse cx="144" cy="62" rx="6" ry="3" fill="#c0415a"/>
+          <g class="flame" id="f4">
+            <ellipse cx="144" cy="52" rx="5" ry="9" fill="#ffcc44" opacity=".9"/>
+            <ellipse cx="144" cy="54" rx="3" ry="5" fill="#ff8800"/>
+            <ellipse cx="144" cy="56" rx="2" ry="3" fill="#fff"/>
+          </g>
+          <g class="smoke" id="s4"><ellipse cx="144" cy="44" rx="3" ry="5" fill="#bbb" opacity=".5"/></g>
+
+          <rect x="163" y="70" width="12" height="30" rx="4" fill="#f0c97a"/>
+          <ellipse cx="169" cy="70" rx="6" ry="3" fill="#c9933a"/>
+          <g class="flame" id="f5">
+            <ellipse cx="169" cy="60" rx="5" ry="9" fill="#ffcc44" opacity=".9"/>
+            <ellipse cx="169" cy="62" rx="3" ry="5" fill="#ff8800"/>
+            <ellipse cx="169" cy="64" rx="2" ry="3" fill="#fff"/>
+          </g>
+          <g class="smoke" id="s5"><ellipse cx="169" cy="52" rx="3" ry="5" fill="#bbb" opacity=".5"/></g>
+        </svg>
+      </div>
+
+      <!-- Blow button -->
+      <div class="action-zone">
+        <button class="blow-btn" id="blow-btn">💨 Blow the Candles!</button>
+      </div>
+
+      <!-- ══ VIDEO WISH — auto-revealed after candles + wish popup ══ -->
+      <div id="video-section">
+        <div class="video-card">
+          <div class="vc-header">
+            <span class="vc-icon">🎬</span>
+            <h3>A Special Message For You</h3>
+            <p>This one is straight from the heart 💌</p>
+          </div>
+          <div class="vc-player-wrap">
+            <!--
+              ✏️ PUT YOUR VIDEO FILE IN THE SAME FOLDER AS index.html
+                 then change "birthday-video.mp4" below to your filename.
+                 Supported: .mp4  .mov  .webm
+            -->
+            <video id="bday-video" controls playsinline>
+              <source src="src/Birthday Wish.mp4" type="video/mp4"/>
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
+
+      <p class="finale-msg">
+        You are my greatest adventure, my safest place, and my happiest chapter yet.
+        Here's to you — today, tomorrow, and every birthday after. 💕
+      </p>
+    </section>
+  </div><!-- /#site -->
+
+  <script src="script.js"></script>
+</body>
+</html>
