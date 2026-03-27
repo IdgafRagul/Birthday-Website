@@ -2,7 +2,7 @@
    ✏️  SETTINGS — edit these to personalise
 ═══════════════════════════════════════════════════════ */
 const PASSCODE  = "1825";                           // 4-digit unlock code
-const BORN_DATE = new Date(2003, 3, 25, 0, 0, 0);  // March 25 2003  (month is 0-indexed)
+const BORN_DATE = new Date(2003, 2, 25, 0, 0, 0);  // March 25 2003  (month is 0-indexed)
 
 // ✏️  Replace "" with a photo path e.g. "photos/us1.jpg"
 //     captionEn / messageEn = English   (face 2)
@@ -383,33 +383,87 @@ function ambientSparkles() {
    COUNTDOWN — years / months / days / h / m / s
 ═══════════════════════════════════════════════════════ */
 function updateCountdown() {
-  const now  = new Date();
-  const diff = now - BORN_DATE;
+  const now      = new Date();
+  const diff     = now - BORN_DATE;
 
   if (diff < 0) {
     document.getElementById("cd-note").textContent = "A beautiful soul is on her way… 🌹";
     return;
   }
 
+  // ── Total elapsed units ──
   const totalSecs  = Math.floor(diff / 1000);
   const totalMins  = Math.floor(totalSecs / 60);
   const totalHours = Math.floor(totalMins / 60);
   const totalDays  = Math.floor(totalHours / 24);
 
-  const years  = now.getFullYear() - BORN_DATE.getFullYear()
-               - (now < new Date(now.getFullYear(), BORN_DATE.getMonth(), BORN_DATE.getDate()) ? 1 : 0);
-  const months = (now.getMonth() - BORN_DATE.getMonth() + 12) % 12;
+  // ── Years elapsed ──
+  let years = now.getFullYear() - BORN_DATE.getFullYear();
+  const thisYearBirthday = new Date(
+    now.getFullYear(),
+    BORN_DATE.getMonth(),
+    BORN_DATE.getDate()
+  );
+  if (now < thisYearBirthday) years--;
 
-  document.getElementById("cd-years").textContent  = years;
-  document.getElementById("cd-months").textContent = months;
-  document.getElementById("cd-days").textContent   = totalDays % 30;
-  document.getElementById("cd-hours").textContent  = totalHours % 24;
-  document.getElementById("cd-mins").textContent   = String(totalMins % 60).padStart(2, "0");
-  document.getElementById("cd-secs").textContent   = String(totalSecs % 60).padStart(2, "0");
-  document.getElementById("cd-note").textContent   =
+  // ── Months elapsed (within current year) ──
+  let months = now.getMonth() - BORN_DATE.getMonth();
+  if (now.getDate() < BORN_DATE.getDate()) months--;
+  if (months < 0) months += 12;
+
+  // ── Days elapsed (within current month) ──
+  // Find the most recent "anniversary of birth day-of-month"
+  let anchorDate = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    BORN_DATE.getDate()
+  );
+  // If that date is in the future this month, go back one month
+  if (anchorDate > now) {
+    anchorDate = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      BORN_DATE.getDate()
+    );
+  }
+  const days = Math.floor((now - anchorDate) / (1000 * 60 * 60 * 24));
+
+  // ── Hours, Minutes, Seconds (live ticking) ──
+  const hours = totalHours % 24;
+  const mins  = totalMins  % 60;
+  const secs  = totalSecs  % 60;
+
+  // ── Smooth flip animation on change ──
+  function setWithFlip(id, newVal) {
+    const el = document.getElementById(id);
+    const val = String(newVal);
+    if (el.dataset.prev === val) return;   // no change → skip
+    el.dataset.prev = val;
+
+    el.animate(
+      [
+        { opacity: 1, transform: "translateY(0px)"   },
+        { opacity: 0, transform: "translateY(-14px)" },
+        { opacity: 0, transform: "translateY(14px)"  },
+        { opacity: 1, transform: "translateY(0px)"   },
+      ],
+      { duration: 350, easing: "ease-in-out" }
+    );
+
+    // update text at the midpoint so it's invisible during swap
+    setTimeout(() => { el.textContent = val; }, 175);
+  }
+
+  setWithFlip("cd-years",  years);
+  setWithFlip("cd-months", months);
+  setWithFlip("cd-days",   days);
+  setWithFlip("cd-hours",  hours);
+  setWithFlip("cd-mins",   String(mins).padStart(2, "0"));
+  setWithFlip("cd-secs",   String(secs).padStart(2, "0"));
+
+  document.getElementById("cd-note").textContent =
     `${totalDays.toLocaleString()} days of sunshine this world has been blessed with 🌹`;
 }
-
 
 /* ═══════════════════════════════════════════════════════
    FLIP CARDS  — 3-face cycle: Photo → Tamil → English
